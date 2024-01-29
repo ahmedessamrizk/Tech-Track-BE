@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const slugify = require('slugify');
 const mobileSchema = new mongoose.Schema({
          brand:{
             type: String
@@ -7,7 +7,7 @@ const mobileSchema = new mongoose.Schema({
          name: {
             type: String
          },
-         'model-name': {
+         model_name: {
             type: String
          },
          img: {
@@ -22,7 +22,7 @@ const mobileSchema = new mongoose.Schema({
          rate: {
             type: Number
          },
-         'no-rates': {
+         no_rates: {
             type: Number
          },
          'screen-size': {
@@ -31,7 +31,7 @@ const mobileSchema = new mongoose.Schema({
          ram: {
             type: String
          },
-         'internal-memory': {
+         internal_memory: {
             type: String
          },
          processor: {
@@ -40,25 +40,25 @@ const mobileSchema = new mongoose.Schema({
          battery: {
             type: String
          },
-         'prim-cam': {
+         prim_cam: {
             type: String
          },
-         'second-cam': {
+         second_cam: {
             type: String
          },
-         'SIM-count': {
+         SIM_count: {
             type: String
          },
          network: {
             type: String
          },
-         'operating-sys': {
+         operating_sys: {
             type: String
          },
          link: {
             type: String
          },
-         'rate-weight': {
+         rate_weight: {
             type: Number
          },
          site: {
@@ -72,6 +72,10 @@ const mobileSchema = new mongoose.Schema({
         { collection: 'Mobiles' }
  );
 
-
-const Mobile = mongoose.model('Mobile', mobileSchema);
+ mobileSchema.pre('save', function(next){//pre means this middleware fn will be performed before a certain event eli hwa el save hena
+   // console.log(this); //as this is a doc middleware so this here refers to the doc being processed at this point of time
+   this.slug = slugify(this.name,{lower: true} );
+   next(); //to call the next middleware in the stack
+});
+const Mobile = mongoose.model('Mobile', mobileSchema, 'Mobiles');
 module.exports = Mobile;
